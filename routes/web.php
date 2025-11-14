@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\Cliente;
-use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,7 +31,21 @@ Route::get('/clientes/create', function() {
     //]);
 });
 
+Route::post('/clientes/create', function(Request $request){
+    $validated = $request->validate([
+        'dni' => 'required|max:9|unique:clientes,dni',
+        'nombre' => 'required|max:255',
+        'apellidos' => 'nullable|max:255',
+        'direccion' => 'nullable|max:255',
+        'codpostal' => 'nullable|digits:5',
+        'telefono' => 'nullable|max:255'
+    ]);
+    Cliente::create($validated);
+    return redirect('/clientes');
+});
+
 Route::delete('/clientes/borrar/{cliente}', function(Cliente $cliente){
     $cliente->delete();
     return redirect('/clientes');
 });
+
