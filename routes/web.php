@@ -31,7 +31,7 @@ Route::get('/clientes/create', function() {
     //]);
 });
 
-Route::post('/clientes/create', function(Request $request){
+Route::post('/clientes', function(Request $request){
     $validated = $request->validate([
         'dni' => 'required|max:9|unique:clientes,dni',
         'nombre' => 'required|max:255',
@@ -44,8 +44,26 @@ Route::post('/clientes/create', function(Request $request){
     return redirect('/clientes');
 });
 
-Route::delete('/clientes/borrar/{cliente}', function(Cliente $cliente){
+Route::delete('/clientes/{cliente}', function(Cliente $cliente){
     $cliente->delete();
     return redirect('/clientes');
 });
 
+Route::get('/clientes/{cliente}/edit', function(Cliente $cliente){
+    return view('/clientes.edit', [
+        'cliente' => $cliente,
+    ]);
+});
+
+Route::put('/clientes/{cliente}', function(Cliente $cliente, Request $request){
+    $validated = $request->validate([
+        'dni' => 'required|max:9|unique:clientes,dni,' . $cliente->id,
+        'nombre' => 'required|max:255',
+        'apellidos' => 'nullable|max:255',
+        'direccion' => 'nullable|max:255',
+        'codpostal' => 'nullable|digits:5',
+        'telefono' => 'nullable|max:255'
+    ]);
+    $cliente->update($validated);
+    return redirect('/clientes');
+});
