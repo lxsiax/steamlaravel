@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\videojuegoController;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,3 +68,13 @@ Route::put('/clientes/{cliente}', function(Cliente $cliente, Request $request){
     $cliente->update($validated);
     return redirect('/clientes');
 });
+/*
+Route::get('/videojuegos', [videojuegoController::class, 'index']);
+Route::get('/videojuegos/create', 'videojuegoController@create');
+Route::get('/videojuegos/destroy', 'videojuegoController@destroy');
+Route::get('/videojuegos/edit', 'videojuegoController@edit');
+Route::get('/videojuegos/show', 'videojuegoController@show');
+Route::get('/videojuegos/store', 'videojuegoController@store');
+Route::get('/videojuegos/update', 'videojuegoController@update'); */
+
+Route::resource('videojuegos', videojuegoController::class);
