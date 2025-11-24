@@ -27,7 +27,15 @@
             </label>
             <label for="desarrolladora_id" class="floating-label">
                 <span>Id desarrolladora:</span>
-                <input class="input" type="text" id="desarrolladora_id" name="desarrolladora_id" value="{{ old('desarrolladora_id') }}"><br>
+                <select class="select" name="desarrolladora_id" id="desarrolladora_id">
+                    @foreach ($desarrolladoras as $desarrolladora)
+                        <option value="{{$desarrolladora->id}}"
+                                {{old('desarrolladora_id') == $desarrolladora->id ? 'selected' : ''}}
+                            >
+                            {{$desarrolladora->denominacion}}</option>
+                    @endforeach
+                </select>
+                <br>
             </label>
             <div class="flex-2">
                 <button class="btn btn-soft btn-success" type="submit">Insertar videojuego</button>
