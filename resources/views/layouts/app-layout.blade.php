@@ -24,7 +24,7 @@
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
-                    <li><a href="">Tienda</a></li>
+                    <li><a href="">Clientes</a></li>
                     <li><a href="">Biblioteca</a></li>
                     <li>
                         <details>

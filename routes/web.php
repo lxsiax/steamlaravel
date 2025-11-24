@@ -18,7 +18,7 @@ Route::get('/clientes', function(){
     return view('clientes.index', [
         'clientes' => Cliente::all(),
     ]);
-});
+})->name('clientes.index');
 
 Route::get('/clientes/create', function() {
     return view('clientes.create');

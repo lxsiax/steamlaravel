@@ -1,28 +1,20 @@
 <x-app-layout>
-    @if ($errors->any())
-        <div>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <x-errores/>
 
-<form action="/videojuegos/{{ $videojuego->id }}" method="POST">
+<form action="/videojuegos/{{ $videojuego->id }}" method="POST" class="card bg-base-200 p-6 shadow">
     @method('PUT')
     @csrf
     <label for="nombre">Nombre:* </label>
-    <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $videojuego->nombre) }}"><br>
+    <input type="text"  class="input" id="nombre" name="nombre" value="{{ old('nombre', $videojuego->nombre) }}"><br>
 
     <label for="precio">Precio:* </label>
-    <input type="text" id="precio" name="precio" value="{{ old('precio', $videojuego->precio) }}"><br>
+    <input type="text" class="input" id="precio" name="precio" value="{{ old('precio', $videojuego->precio) }}"><br>
 
     <label for="lanzamiento">Fecha de lanzamiento: </label>
-    <input type="text" id="lanzamiento" name="lanzamiento" value="{{ old('lanzamiento', $videojuego->lanzamiento) }}"><br>
+    <input type="text" class="input" id="lanzamiento" name="lanzamiento" value="{{ old('lanzamiento', $videojuego->lanzamiento) }}"><br>
 
-    <label for="desarrolladora">ID Desarrolladora: </label>
-    <input type="text" id="desarrolladora" name="desarrolladora" value="{{ old('desarrolladora', $videojuego->desarrolladora) }}"><br>
+    <label for="desarrolladora_id">ID Desarrolladora: </label>
+    <input type="text" class="input" id="desarrolladora_id" name="desarrolladora_id" value="{{ old('desarrolladora_id', $videojuego->desarrolladora_id) }}"><br>
 
     <button type="submit">Modificar</button>
 </form>

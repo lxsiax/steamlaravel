@@ -57,11 +57,13 @@ class VideojuegoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Videojuego $videojuego)
+    public function edit(Videojuego $videojuego, Desarrolladora $desarrolladoras)
     {
+        $desarrolladoras = Desarrolladora::all();
         return view('videojuegos.edit', [
-            'videojuego' => $videojuego,
-        ]);
+        'videojuego' => $videojuego,
+        'desarrolladoras' => $desarrolladoras
+]);
     }
 
     /**
@@ -72,11 +74,8 @@ class VideojuegoController extends Controller
             'nombre' => 'required|string|max:255',
             'precio' => 'required|numeric|decimal:2|gte:-999999.99|lte:999999.99',
             'lanzamiento' => 'required|date',
-            'desarrolladora' => 'required|exists:desarrolladoras,id',
+            'desarrolladora_id' => 'required|exists:desarrolladoras,id',
         ]);
-
-        Videojuego::create($validated);
-        return redirect()->route('videojuegos.index');
 
         $videojuego->update($validated);
         return redirect()->route('videojuegos.index');
