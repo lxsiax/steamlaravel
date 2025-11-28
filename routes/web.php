@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\videojuegoController;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
@@ -78,3 +79,4 @@ Route::get('/videojuegos/store', 'videojuegoController@store');
 Route::get('/videojuegos/update', 'videojuegoController@update'); */
 
 Route::resource('videojuegos', videojuegoController::class);
+Route::resource('generos', GeneroController::class);
