@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\videojuegoController;
+use App\Http\Controllers\VideojuegoController as ControllersVideojuegoController;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -80,3 +81,11 @@ Route::get('/videojuegos/update', 'videojuegoController@update'); */
 
 Route::resource('videojuegos', videojuegoController::class);
 Route::resource('generos', GeneroController::class);
+
+Route::post('/videojuegos/{videojuego}/agregar-genero',
+    [videojuegoController::class, 'agregar_genero']
+)->name('videojuegos.agregar_genero');
+
+Route::delete('/videojuegos/{videojuego}/quitar_genero/{genero}',
+    [videojuegoController::class,'quitar_genero']
+    )->name('videojuegos.quitar_genero');

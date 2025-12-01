@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-errores/>
     <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
         <figure>
             <img
@@ -27,21 +28,46 @@
         </div>
 
         <ul class="list bg-base-100 rounded-box shadow-md">
-
-
             @foreach ($videojuego->generos as $genero)
-                <li class="list-row">
-                    <div><img class="size-10 rounded-box" src="https://img.daisyui.com/images/profile/demo/1@94.webp"/></div>
-                    <div class="flex-1 min-w-0 ms-2">
-                        <p class="font-medium text-heading truncate"> <a href="{{route('generos.show', $genero)}}">
-                            {{$genero->genero}}
-                        </p>
+                <li class="flex items-center gap-3 p-2 border-b last:border-b-0">
+                    <img class="w-10 h-10 rounded-full" src="https://img.daisyui.com/images/profile/demo/1@94.webp" alt="Genero"/>
+                    <div class="flex-1 min-w-0">
+                        <a href="{{ route('generos.show', $genero) }}" class="font-medium text-heading truncate hover:text-blue-500">
+                            {{ $genero->genero }}
+                        </a>
                     </div>
-                    <button class="btn btn-soft btn-error">Borrar</button>
+                    <form action="{{route('videojuegos.quitar_genero',
+                    ['videojuego' => $videojuego, 'genero' => $genero])}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-error btn-sm">Borrar</button>
+                    </form>
                 </li>
             @endforeach
+        </ul>
 
-            </ul>
+
+        <br><br>
+        @if ($generos->IsnotEmpty())
+        <form action="{{ route('videojuegos.agregar_genero', $videojuego) }}" method="POST">
+            @csrf
+
+            <label for="genero_id" class="floating-label">
+                <span>Añadir género:</span>
+
+                <select class="select" name="genero_id" id="genero_id">
+                    @foreach ($generos as $genero)
+                        <option value="{{ $genero->id }}"
+                            {{ old('genero_id') == $genero->id ? 'selected' : '' }}>
+                            {{ $genero->genero }}
+                        </option>
+                    @endforeach
+                </select>
+            </label>
+            <br>
+            <button class="btn btn-secondary">Agregar</button>
+        </form>
+        @endif
         <a href="/videojuegos" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
             Volver
         </a>

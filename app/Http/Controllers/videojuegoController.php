@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Desarrolladora;
+use App\Models\Genero;
 use App\Models\Videojuego;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Pest\Support\View;
 
 class VideojuegoController extends Controller
 {
@@ -49,8 +52,13 @@ class VideojuegoController extends Controller
      */
     public function show(Videojuego $videojuego)
     {
+        //$generos = Genero::whereNotIn('id', $videojuego->generos->pluck('id'))->get();
+        $generos = Genero::whereDoesntHave('videojuegos', function (Builder $q) use ($videojuego){
+            $q->where('videojuego_id',  $videojuego->id);
+        })->get();
         return view('videojuegos.show',
-        ['videojuego' => $videojuego
+        ['videojuego' => $videojuego,
+        'generos' => $generos,
         ]);
     }
 
@@ -89,4 +97,26 @@ class VideojuegoController extends Controller
         $videojuego->delete();
         return redirect('/videojuegos');
     }
+
+    public function agregar_genero(Videojuego $videojuego, Request $request)
+    {
+
+        $genero = Genero::findOrFail($request->genero_id);
+        if ($videojuego->generos()->where('id', $genero->id)->exists()){
+            return back()->withErrors(['genero_id' => 'El videojuego ya tiene ese género.']);
+        }
+        $videojuego->generos()->attach($genero);
+        return redirect()->route('videojuegos.show', $videojuego);
+
+    }
+
+     public function quitar_genero(Videojuego $videojuego, Genero $genero)
+     {
+        if (!$videojuego->generos()->where('id', $genero->id)->exists()){
+            return back()->withErrors(['genero_id' => 'El videojuego no tiene ese género.']);
+        } else {
+            $videojuego->generos()->detach($genero);
+            return redirect()->route('videojuegos.show', $videojuego);
+     }
+}
 }
