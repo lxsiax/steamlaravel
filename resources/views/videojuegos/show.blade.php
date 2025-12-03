@@ -11,7 +11,7 @@
 
         <div class="mb-2">
             <span class="font-semibold text-gray-700">Precio:</span>
-            <span class="text-gray-900 ml-2">{{ $videojuego->precio }}</span>
+            <span class="text-gray-900 ml-2">{{ $videojuego->precio . " €" }}</span>
         </div>
 
         <div class="mb-2">

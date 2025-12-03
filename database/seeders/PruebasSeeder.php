@@ -35,6 +35,17 @@ class PruebasSeeder extends Seeder{
             DB::table('generos')->insert([
                [ 'genero'=>'Ciencia-Ficción'],
                ['genero' => 'Terror'],
+               ['genero' => 'Arcade'],
+               ['genero' => 'Rol'],
+               ['genero' => 'Simulador'],
+               ['genero' => 'Mundo abierto'],
+               ['genero' => 'Lucha 2D'],
+               ['genero' => 'Lucha 3D'],
+               ['genero' => 'Lógica'],
+               ['genero' => 'Puzzle'],
+               ['genero' => 'Novela Visual'],
+               ['genero' => 'Suspense'],
+
             ]);
             }}
         }
