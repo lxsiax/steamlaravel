@@ -9,13 +9,27 @@
     </form>
     <table class="table">
         <thead>
-            <th>Género</th>
+            <th>
+                @php
+                    $sentido = $sentido == 'asc' ? 'desc' : 'asc';
+                    $flecha = $sentido == 'asc' ? '↑' : '↓';
+                @endphp
+               <a class="btn btn-ghost" href="{{request()->fullUrlWithQuery(['sentido' => $sentido])}}">Género {{$flecha}}</a>
+            </th>
+            <th>Acciones</th>
         </thead>
         <tbody>
             @foreach ($generos as $genero)
                 <tr>
                     <td>{{ $genero->genero }}</td>
-                </tr>
+                <td>
+                <form action="{{route('generos.destroy', $genero) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-error btn-sm">Borrar</button>
+                </form>
+            </td>
+        </tr>
             @endforeach
         </tbody>
     </table><br>

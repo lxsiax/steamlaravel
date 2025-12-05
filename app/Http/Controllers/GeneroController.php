@@ -6,6 +6,8 @@ use App\Models\Genero;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
+use function Pest\Laravel\session;
+
 class GeneroController extends Controller
 {
     /**
@@ -13,13 +15,16 @@ class GeneroController extends Controller
      */
     public function index(Request $request)
     {
-        $q = Genero::orderBy('genero');
+        $q = Genero::query();
         if($buscar = $request->query('buscar')){
             $q->WhereLike('genero', "%$buscar%", false);
         }
+        $sentido = $request->query('sentido') == 'desc' ? 'desc' : 'asc';
+        $q->orderBy('genero', $sentido);
         return view('generos.index', [
             'generos' => $q->paginate(5)->withQueryString(),
             'buscar' => $buscar,
+            'sentido' => $sentido,
         ]);
     }
 
@@ -73,6 +78,10 @@ class GeneroController extends Controller
      */
     public function destroy(Genero $genero)
     {
-        //
+        if($genero->videojuegos()->exists()){
+            return back()->with('fallo', 'El género tiene videojuegos');
+        }
+        $genero->delete();
+        return redirect()->route('generos.index')->with('exito', 'El género se ha borrado correctamente.');
     }
 }

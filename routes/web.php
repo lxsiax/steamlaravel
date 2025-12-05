@@ -4,12 +4,11 @@ use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\videojuegoController;
 use App\Http\Controllers\VideojuegoController as ControllersVideojuegoController;
 use App\Models\Cliente;
+use App\Models\User;
+use App\Models\Videojuego;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/hola', function(){
     $nombre = request()->query('nombre');
@@ -89,3 +88,13 @@ Route::post('/videojuegos/{videojuego}/agregar-genero',
 Route::delete('/videojuegos/{videojuego}/quitar_genero/{genero}',
     [videojuegoController::class,'quitar_genero']
     )->name('videojuegos.quitar_genero');
+
+
+
+Route::redirect('/', route('videojuegos.index'));
+
+Route::get('/profile', function(){
+    return view('users.profile', [
+        'usuario' => User::find(1),
+    ]);
+});

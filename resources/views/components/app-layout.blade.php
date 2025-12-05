@@ -31,7 +31,7 @@
                         <details>
                             <summary>Menú</summary>
                             <ul class="bg-base-100 rounded-t-none p-2">
-                                <li><a href="">Opciones</a></li>
+                                <li><a href="/profile">Perfil</a></li>
                                 <li><a href="">Salir</a></li>
                             </ul>
                         </details>
@@ -41,6 +41,8 @@
         </div>
         <!-- Principal -->
         <main class="m-6">
+            <x-alert-exito/>
+            <x-alert-fallo/>
             {{ $slot }}
         </main>
     </div>

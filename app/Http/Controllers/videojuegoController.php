@@ -55,10 +55,12 @@ class VideojuegoController extends Controller
         //$generos = Genero::whereNotIn('id', $videojuego->generos->pluck('id'))->get();
         $generos = Genero::whereDoesntHave('videojuegos', function (Builder $q) use ($videojuego){
             $q->where('videojuego_id',  $videojuego->id);
-        })->get();
+        })->orderBy('genero')->get();
+        $usuarios = $videojuego->users;
         return view('videojuegos.show',
         ['videojuego' => $videojuego,
         'generos' => $generos,
+        'usuarios' => $usuarios,
         ]);
     }
 
@@ -106,7 +108,7 @@ class VideojuegoController extends Controller
             return back()->withErrors(['genero_id' => 'El videojuego ya tiene ese género.']);
         }
         $videojuego->generos()->attach($genero);
-        return redirect()->route('videojuegos.show', $videojuego);
+        return redirect()->route('videojuegos.show', $videojuego)->with('exito', 'Género agregado con éxito');
 
     }
 
@@ -116,7 +118,7 @@ class VideojuegoController extends Controller
             return back()->withErrors(['genero_id' => 'El videojuego no tiene ese género.']);
         } else {
             $videojuego->generos()->detach($genero);
-            return redirect()->route('videojuegos.show', $videojuego);
+            return redirect()->route('videojuegos.show', $videojuego)->with('exito', 'Género quitado con éxito');
      }
 }
 }

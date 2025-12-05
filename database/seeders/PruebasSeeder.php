@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PruebasSeeder extends Seeder{
 
@@ -15,6 +16,12 @@ class PruebasSeeder extends Seeder{
     {
         // User::factory(10)->create();
         if(app()->environment('local')){
+
+            DB::table('users')->insert([
+                'name' => 'Lucia',
+                'email' => 'lucia@gmail.com',
+                'password' => Hash::make('lucia'),
+            ]);
 
             $editora_id = DB::table('editoras')->insertGetId([
                 'nombre' => 'Steam',
@@ -46,6 +53,15 @@ class PruebasSeeder extends Seeder{
                ['genero' => 'Novela Visual'],
                ['genero' => 'Suspense'],
 
+            ]);
+
+            DB::table('hardware')->insert([
+                ['nombre' => 'Steam Controller',
+                'descripcion' => 'controlador uwu',
+                'precio' => 80.00],
+                ['nombre' => 'Steam Machine',
+                'descripcion' => 'maquina uwu',
+                'precio' => 700.00]
             ]);
             }}
         }
