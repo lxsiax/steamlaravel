@@ -5,7 +5,9 @@
             <th>Precio</th>
             <th>Fecha de lanzamiento</th>
             <th>Desarrolladora</th>
-            <th>Modificar</th>
+            @auth
+                <th>Modificar</th>
+            @endauth
         </thead>
         <tbody>
             @foreach ($videojuegos as $videojuego)
@@ -15,6 +17,7 @@
                     <td>{{ $videojuego->precio_formateado }}</td>
                     <td>{{ $videojuego->lanzamiento_formateado }}</td>
                     <td>{{ $videojuego->desarrolladora->denominacion }}</td>
+                    @auth
                      <td>
                         <form action="/videojuegos/{{ $videojuego->id }}" method="POST">
                             @method('DELETE')
@@ -27,6 +30,7 @@
                             Modificar
                         </a>
                     </td>
+                    @endauth
                 </tr>
 
             @endforeach

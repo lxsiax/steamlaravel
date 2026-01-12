@@ -16,19 +16,23 @@
                 @endphp
                <a class="btn btn-ghost" href="{{request()->fullUrlWithQuery(['sentido' => $sentido])}}">Género {{$flecha}}</a>
             </th>
+        @auth
             <th>Acciones</th>
+        @endauth
         </thead>
         <tbody>
             @foreach ($generos as $genero)
                 <tr>
                     <td>{{ $genero->genero }}</td>
-                <td>
+            @auth
+            <td>
                 <form action="{{route('generos.destroy', $genero) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-error btn-sm">Borrar</button>
                 </form>
             </td>
+            @endauth
         </tr>
             @endforeach
         </tbody>

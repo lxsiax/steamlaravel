@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\GeneroController;
-use App\Http\Controllers\videojuegoController;
-use App\Http\Controllers\VideojuegoController as ControllersVideojuegoController;
+use App\Http\Controllers\VideojuegoController;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Videojuego;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -78,23 +78,53 @@ Route::get('/videojuegos/show', 'videojuegoController@show');
 Route::get('/videojuegos/store', 'videojuegoController@store');
 Route::get('/videojuegos/update', 'videojuegoController@update'); */
 
-Route::resource('videojuegos', videojuegoController::class);
-Route::resource('generos', GeneroController::class);
+Route::resource('videojuegos', VideojuegoController::class)->except(['index', 'show'])->middleware('auth');
+
+Route::resource('videojuegos', VideojuegoController::class)->only(['index', 'show']);
+
+Route::resource('generos', GeneroController::class)->except(['index', 'show'])->middleware('auth');
+
+Route::resource('generos', GeneroController::class)->only(['index', 'show']);
 
 Route::post('/videojuegos/{videojuego}/agregar-genero',
-    [videojuegoController::class, 'agregar_genero']
-)->name('videojuegos.agregar_genero');
+    [VideojuegoController::class, 'agregar_genero']
+)->middleware('auth')->name('videojuegos.agregar_genero');
 
 Route::delete('/videojuegos/{videojuego}/quitar_genero/{genero}',
-    [videojuegoController::class,'quitar_genero']
-    )->name('videojuegos.quitar_genero');
+    [VideojuegoController::class,'quitar_genero']
+    )->middleware('auth')->name('videojuegos.quitar_genero');
 
+Route::get('/login', function(){
+    return view('users.login');
+})->name('login');
 
+Route::post('/login', function (Request $request){
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-Route::redirect('/', route('videojuegos.index'));
+    if(Auth::attempt($credentials)){
+        $request->session()->regenerate();
+        return redirect()->intended(route('users.profile'));
+    }
+
+    return back()->withErrors([
+        'email' => 'Las credenciales no corresponden a ninguna cuenta',
+    ])->onlyInput('email');
+})->name('login.perform');
+
+Route::post('/logout', function(Request $request){
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->middleware('auth')->name('logout');
 
 Route::get('/profile', function(){
     return view('users.profile', [
-        'usuario' => User::find(1),
+        'usuario' => Auth::user(),
     ]);
-});
+})->middleware('auth')->name('users.profile');
+
+Route::redirect('/', route('videojuegos.index'));

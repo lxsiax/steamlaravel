@@ -28,13 +28,21 @@
                     <li><a href="{{ route('videojuegos.index')}}">Videojuegos</a></li>
                     <li><a href="{{ route('generos.index')}}">Géneros</a></li>
                     <li>
+                        @auth
                         <details>
-                            <summary>Menú</summary>
+                            <summary>{{Auth::user()->name}}</summary>
                             <ul class="bg-base-100 rounded-t-none p-2">
-                                <li><a href="/profile">Perfil</a></li>
-                                <li><a href="">Salir</a></li>
+                                <li><a href="{{route('users.profile')}}">Perfil</a></li>
+                                <li>
+                                    <form method="POST" action="{{route('logout')}}">
+                                        @csrf
+                                        <button type="submit"> Salir</button>
+                                    </form></li>
                             </ul>
                         </details>
+                        @else
+                        <a class="btn btn-secondary" href="{{ route('login')}}">Iniciar sesión</a>
+                        @endauth
                     </li>
                 </ul>
             </div>
