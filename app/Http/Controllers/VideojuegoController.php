@@ -7,7 +7,8 @@ use App\Models\Genero;
 use App\Models\Videojuego;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Pest\Support\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class VideojuegoController extends Controller
 {
@@ -26,9 +27,22 @@ class VideojuegoController extends Controller
      */
     public function create()
     {
-        return view('videojuegos.create',[
-           'desarrolladoras' => Desarrolladora::all(),
-            ]);
+        // Gate::authorize('videojuego-create');
+        if (Gate::denies('videojuego-create')) {
+            return redirect()
+                ->route('videojuegos.index')
+                ->with('fallo', 'No tienes permiso para crear videojuegos.');
+            // abort(403, 'No tienes permiso para crear videojuegos.');
+        }
+        // if (!Gate::allows('videojuego-create')) {
+        //     abort(403, 'No tienes permiso para crear videojuegos.');
+        // }
+        // if (!Auth::user()->can('videojuego-create')) {
+        //     abort(403, 'No tienes permiso para crear videojuegos.');
+        // }
+        return view('videojuegos.create', [
+            'desarrolladoras' => Desarrolladora::all(),
+        ]);
     }
 
     /**
@@ -37,12 +51,11 @@ class VideojuegoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre' => 'required|max:255',
             'precio' => 'required|numeric|decimal:2|gte:-999999.99|lte:999999.99',
             'lanzamiento' => 'required|date',
             'desarrolladora_id' => 'required|exists:desarrolladoras,id',
         ]);
-
         Videojuego::create($validated);
         return redirect()->route('videojuegos.index');
     }
@@ -52,43 +65,33 @@ class VideojuegoController extends Controller
      */
     public function show(Videojuego $videojuego)
     {
-        //$generos = Genero::whereNotIn('id', $videojuego->generos->pluck('id'))->get();
-        $generos = Genero::whereDoesntHave('videojuegos', function (Builder $q) use ($videojuego){
-            $q->where('videojuego_id',  $videojuego->id);
+        // $otros_generos = Genero::whereNotIn('id', $videojuego->generos->pluck('id'))->get();
+        $otros_generos = Genero::whereDoesntHave('videojuegos', function (Builder $q) use ($videojuego) {
+            $q->where('videojuego_id', $videojuego->id);
         })->orderBy('genero')->get();
-        $usuarios = $videojuego->users;
-        return view('videojuegos.show',
-        ['videojuego' => $videojuego,
-        'generos' => $generos,
-        'usuarios' => $usuarios,
+        return view('videojuegos.show', [
+            'videojuego' => $videojuego,
+            'otros_generos' => $otros_generos,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Videojuego $videojuego, Desarrolladora $desarrolladoras)
+    public function edit(Videojuego $videojuego)
     {
-        $desarrolladoras = Desarrolladora::all();
         return view('videojuegos.edit', [
-        'videojuego' => $videojuego,
-        'desarrolladoras' => $desarrolladoras
-]);
+            'videojuego' => $videojuego,
+            'desarrolladoras' => Desarrolladora::all(),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Videojuego $videojuego)
-    {   $validated = $request->validate([
-            'nombre' => 'required|string|max:255',
-            'precio' => 'required|numeric|decimal:2|gte:-999999.99|lte:999999.99',
-            'lanzamiento' => 'required|date',
-            'desarrolladora_id' => 'required|exists:desarrolladoras,id',
-        ]);
-
-        $videojuego->update($validated);
-        return redirect()->route('videojuegos.index');
+    {
+        //
     }
 
     /**
@@ -96,29 +99,30 @@ class VideojuegoController extends Controller
      */
     public function destroy(Videojuego $videojuego)
     {
-        $videojuego->delete();
-        return redirect('/videojuegos');
+        //
     }
 
-    public function agregar_genero(Videojuego $videojuego, Request $request)
+    public function agregar_genero(Request $request, Videojuego $videojuego)
     {
-
         $genero = Genero::findOrFail($request->genero_id);
-        if ($videojuego->generos()->where('id', $genero->id)->exists()){
+        if ($videojuego->generos()->where('id', $genero->id)->exists())
+        {
             return back()->withErrors(['genero_id' => 'El videojuego ya tiene ese género.']);
         }
         $videojuego->generos()->attach($genero);
-        return redirect()->route('videojuegos.show', $videojuego)->with('exito', 'Género agregado con éxito');
-
+        return redirect()
+            ->route('videojuegos.show', $videojuego)
+            ->with('exito', 'Género agregado');
     }
 
-     public function quitar_genero(Videojuego $videojuego, Genero $genero)
-     {
-        if (!$videojuego->generos()->where('id', $genero->id)->exists()){
+    public function quitar_genero(Videojuego $videojuego, Genero $genero)
+    {
+        if (!$videojuego->generos()->where('id', $genero->id)->exists()) {
             return back()->withErrors(['genero_id' => 'El videojuego no tiene ese género.']);
-        } else {
-            $videojuego->generos()->detach($genero);
-            return redirect()->route('videojuegos.show', $videojuego)->with('exito', 'Género quitado con éxito');
-     }
-}
+        }
+        $videojuego->generos()->detach($genero);
+        return redirect()
+            ->route('videojuegos.show', $videojuego)
+            ->with('exito', 'Género quitado');
+    }
 }

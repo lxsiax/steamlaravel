@@ -32,11 +32,11 @@
                         <details>
                             <summary>{{Auth::user()->name}}</summary>
                             <ul class="bg-base-100 rounded-t-none p-2">
-                                <li><a href="{{route('users.profile')}}">Perfil</a></li>
+                                <li><a href="{{route('user.profile')}}">Perfil</a></li>
                                 <li>
                                     <form method="POST" action="{{route('logout')}}">
                                         @csrf
-                                        <button type="submit"> Salir</button>
+                                        <button type="submit">Salir</button>
                                     </form></li>
                             </ul>
                         </details>

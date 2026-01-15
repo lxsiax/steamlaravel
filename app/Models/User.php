@@ -64,4 +64,8 @@ class User extends Authenticatable
     public function logros(): HasMany {
         return $this->hasMany(Logro::class);
     }
+
+    public function comentarios() : HasMany {
+        return $this->hasMany(Comentario::class);
+    }
 }
