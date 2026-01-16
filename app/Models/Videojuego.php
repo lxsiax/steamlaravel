@@ -58,4 +58,8 @@ class Videojuego extends Model
     public function comentarios(){
         return $this->hasMany(Comentario::class);
     }
+
+    public static function rules(): array {
+        return Videojuego::rules();
+    }
 }

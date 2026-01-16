@@ -6,7 +6,7 @@
             <th>Fecha de lanzamiento</th>
             <th>Desarrolladora</th>
             @auth
-                <th>Modificar</th>
+                <th>Acciones</th>
             @endauth
         </thead>
         <tbody>
