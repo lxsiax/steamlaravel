@@ -1,0 +1,8 @@
+<x-app-layout>
+    <div class="text-center mt-20">
+        <h1 class="text-6xl font-bold">403</h1>
+        <p class="text-2xl mt-4">{{$exception->getMessage()}}</p>
+        <a href="{{url('/')}}" class="mt-6 inline-block px-4 py-2 bg-blue-600 text-white rounded-2xl">
+        Volver al inicio</a>
+    </div>
+</x-app-layout>

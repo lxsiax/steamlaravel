@@ -6,17 +6,20 @@ use App\Models\Comentario;
 use App\Models\User;
 use App\Models\Videojuego;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ComentarioPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): Response
+    public function viewAny(User $user): Response|RedirectResponse
     {
-        return $user->name == 'admin'
-        ? Response::allow()
-        : Response::deny('Solo el administrador puede ver los comentarios.');
+        return Response::deny("Solo el administrador puede ver los comentarios");
+        return Response::allow();
+        //return Response::allow();
+
     }
 
     /**
