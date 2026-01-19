@@ -2,7 +2,7 @@
     <x-errores/>
         <h4 align="center"class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">Insertar un videojuego</h4>
     <div class="w-full max-w-sm mx-auto">
-        <form action="/videojuegos" method="POST" class="card bg-base-200 p-6 shadow">
+        <form action="/videojuegos" method="POST" class="card bg-base-200 p-6 shadow" enctype="multipart/form-data">
             @csrf
             <label for="nombre" class="floating-label">
                 <span>Nombre:*</span>
@@ -15,7 +15,7 @@
             <label for="lanzamiento" class="floating-label">
                 <span>Lanzamiento:</span>
                 <input class="input" type="date" id="lanzamiento" name="lanzamiento" value="{{ old('lanzamiento') }}"><br>
-            </label>
+            </label><br>
             <label for="desarrolladora_id" class="floating-label">
                 <span>Id desarrolladora:</span>
                 <select class="select" name="desarrolladora_id" id="desarrolladora_id">
@@ -28,10 +28,14 @@
                 </select>
                 <br>
             </label>
+            <div class="mb-6"></div>
+            <label for="imagen" class="floating-label">
+                <span>Imagen:</span>
+                <input class="file-input" type="file" id="imagen" name="imagen" value="{{ old('imagen') }}"><br>
+            </label>
             <div class="flex-2">
                 <button class="btn btn-soft btn-success" type="submit">Insertar videojuego</button>
-                <a href="{{ route('videojuegos.index') }}" class="btn btn-soft btn-info">Volver</a>
-
+                <a href="{{ route('videojuegos.index') }}" class="btn btn-soft btn-secondary">Volver</a>
             </div>
         </form>
     </div>

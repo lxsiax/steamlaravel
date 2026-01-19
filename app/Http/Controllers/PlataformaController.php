@@ -29,7 +29,7 @@ class PlataformaController extends Controller
      */
     public function store(StorePlataformaRequest $request)
     {
-       Plataforma::create($request->validated());
+        Plataforma::create($request->validated());
     }
 
     /**

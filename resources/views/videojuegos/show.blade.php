@@ -1,101 +1,75 @@
 <x-app-layout>
-    <x-errores/>
-    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
-        <figure>
-            <img
-            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-            alt="Shoes" />
+    <x-errores />
+    <div class="card bg-base-300 w-full shadow-sm">
+        <figure class="p-4">
+            <img width="420" height="300"
+                src="{{ asset('storage/videojuegos/' . $videojuego->imagen) }}"
+                alt="" />
         </figure>
-        <br>
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $videojuego->nombre }}</h1>
-
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Precio:</span>
-            <span class="text-gray-900 ml-2">{{ $videojuego->precio . " €" }}</span>
-        </div>
-
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Fecha de lanzamiento:</span>
-            <span class="text-gray-900 ml-2">{{ $videojuego->lanzamiento }}</span>
-        </div>
-
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Desarrolladora:</span>
-            <span class="text-gray-900 ml-2">{{ $videojuego->desarrolladora->denominacion }}</span>
-        </div>
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Géneros:</span>
-        </div>
-
-        <ul class="list bg-base-100 rounded-box shadow-md">
-            @foreach ($videojuego->generos as $genero)
-                <li class="flex items-center gap-3 p-2 border-b last:border-b-0">
-                    <img class="w-10 h-10 rounded-full" src="https://img.daisyui.com/images/profile/demo/1@94.webp" alt="Genero"/>
-                    <div class="flex-1 min-w-0">
-                        <a href="{{ route('generos.show', $genero) }}" class="font-medium text-heading truncate hover:text-blue-500">
-                            {{ $genero->genero }}
-                        </a>
-                    </div>
-                    @auth
-                        <form action="{{route('videojuegos.quitar_genero',
-                        ['videojuego' => $videojuego, 'genero' => $genero])}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-error btn-sm">Borrar</button>
-                        </form>
-                    @endauth
-                </li>
-            @endforeach
-        </ul>
-
-
-        <br><br>
-        @auth
-
-            @if ($generos->IsnotEmpty())
-            <form action="{{ route('videojuegos.agregar_genero', $videojuego) }}" method="POST">
-                @csrf
-
-                <label for="genero_id" class="floating-label">
-                    <span>Añadir género:</span>
-
-                    <select class="select" name="genero_id" id="genero_id">
-                        @foreach ($generos as $genero)
-                            <option value="{{ $genero->id }}"
-                                {{ old('genero_id') == $genero->id ? 'selected' : '' }}>
-                                {{ $genero->genero }}
-                            </option>
-                        @endforeach
-                    </select>
-                </label>
-                <br>
-                <button class="btn btn-secondary">Agregar</button>
-            </form>
-            @endif
-            <br><br>
-            <div class="mb-2">
-                <span class="font-semibold text-gray-700">Usuarios:</span>
-            </div>
+        <div class="card-body">
+            <h2 class="card-title text-3xl uppercase tracking-wide">
+                {{ $videojuego->nombre }}
+            </h2>
+            <span>Publicado el {{ $videojuego->lanzamiento_formateado }}</span>
 
             <ul class="list bg-base-100 rounded-box shadow-md">
-                @foreach ($usuarios as $usuario)
-                    <li class="flex items-center gap-3 p-2 border-b last:border-b-0">
-                        <img class="w-10 h-10 rounded-full" src="https://img.daisyui.com/images/profile/demo/1@94.webp" alt="Genero"/>
-                        <div class="flex-1 min-w-0">
-                                {{ $usuario->name }}
+                <li class="p-4 pb-2 opacity-60 tracking-wide text-xl">
+                    Géneros
+                </li>
+
+                @foreach ($videojuego->generos as $genero)
+                    <li class="list-row">
+                        <div>
+                            <img class="size-10 rounded-box"
+                                src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
                         </div>
-                        <form action="{{route('videojuegos.quitar_genero',
-                        ['videojuego' => $videojuego, 'genero' => $genero])}}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-error btn-sm">Borrar</button>
-                        </form>
+                        <div>
+                            <div class="text-lg">
+                                <a class="link link-primary" href="{{ route('generos.show', $genero) }}">
+                                    {{ $genero->genero }}
+                                </a>
+                            </div>
+                        </div>
+                        @auth
+                            <form
+                                action="{{ route(
+                                    'videojuegos.quitar_genero',
+                                    ['videojuego' => $videojuego, 'genero' => $genero]
+                                ) }}"
+                                method="POST"
+                                >
+                                @method('DELETE')
+                                @csrf
+                                <button class="btn btn-square btn-ghost">🗑</button>
+                            </form>
+                        @endauth
                     </li>
                 @endforeach
             </ul>
-         @endauth
-        <a href="/videojuegos" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-            Volver
-        </a>
+            @auth
+                @if ($otros_generos->isNotEmpty())
+                    <form
+                    class="mt-4"
+                        action="{{ route('videojuegos.agregar_genero', $videojuego) }}"
+                        method="POST"
+                        >
+                        @csrf
+                        <div class="flex gap-3">
+                            <label for="genero_id" class="floating-label w-80">
+                                <span>Género a añadir:</span>
+                                <select class="select" name="genero_id" id="genero_id">
+                                    @foreach ($otros_generos as $otro_genero)
+                                    <option value="{{ $otro_genero->id }}">
+                                        {{ $otro_genero->genero }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </label>
+                            <button type="submit" class="btn btn-primary">Añadir</button>
+                        </div>
+                    </form>
+                @endif
+            @endauth
+        </div>
     </div>
 </x-app-layout>

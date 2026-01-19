@@ -5,38 +5,53 @@
             <th>Precio</th>
             <th>Fecha de lanzamiento</th>
             <th>Desarrolladora</th>
-            @auth
-                <th>Acciones</th>
-            @endauth
+            <th>Acciones</th>
         </thead>
         <tbody>
             @foreach ($videojuegos as $videojuego)
                 <tr>
-                    <td><a class="link link-secondary"
-                        href="{{ route('videojuegos.show', $videojuego)}}">{{ $videojuego->nombre }}</td>
+                    <td>
+                        <a class="link link-primary"
+                           href="{{ route('videojuegos.show', $videojuego) }}">
+                            {{ $videojuego->nombre }}
+                        </a>
+                    </td>
                     <td>{{ $videojuego->precio_formateado }}</td>
                     <td>{{ $videojuego->lanzamiento_formateado }}</td>
                     <td>{{ $videojuego->desarrolladora->denominacion }}</td>
-                    @auth
-                     <td>
-                        <form action="/videojuegos/{{ $videojuego->id }}" method="POST">
-                            @method('DELETE')
-                            @csrf
-                            <button type="submit" class="text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Borrar</button>
-                        </form>
-                    </td>
                     <td>
-                        <a href="/videojuegos/{{ $videojuego->id }}/edit">
-                            Modificar
-                        </a>
-                    </td>
-                    @endauth
+                        <div class="flex gap-2">
+                            @can('update', $videojuego)
+                            <a
+                                class="btn btn-sm btn-ghost btn-info"
+                                href="{{ route('videojuegos.edit', $videojuego) }}"
+                            >
+                                Editar
+                            </a>
+                            @endcan
+                            @can('delete', $videojuego)
+                                <form
+                                    method="POST"
+                                    action="{{ route('videojuegos.destroy', $videojuego) }}"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        class="btn btn-sm btn-ghost btn-error"
+                                        onclick="return confirm('¿Está seguro de que desea eliminar este videojuego?')"
+                                    >
+                                        Eliminar
+                                    </button>
+                                </form>
+                            @endcan
+                        </td>
+                    </div>
                 </tr>
-
             @endforeach
         </tbody>
     </table>
     @can('videojuego-create')
-        <a class="btn btn-secondary" href="{{ route('videojuegos.create') }}">Dar de alta un nuevo videojuego</a>
+        <a class="btn btn-sm btn-ghost btn-primary" href="{{ route('videojuegos.create') }}">Dar de alta un nuevo videojuego</a>
     @endcan
 </x-app-layout>

@@ -13,7 +13,7 @@ class VideojuegoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->name == 'admin';
+        return false;
     }
 
     /**
@@ -45,7 +45,7 @@ class VideojuegoPolicy
      */
     public function delete(User $user, Videojuego $videojuego): bool
     {
-        return false;
+        return $user->name == 'admin';
     }
 
     /**

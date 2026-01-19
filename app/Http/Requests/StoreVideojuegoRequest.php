@@ -22,11 +22,6 @@ class StoreVideojuegoRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'nombre' => 'required|max:255',
-            'precio' => 'required|numeric|decimal:2|gte:-999999.99|lte:999999.99',
-            'lanzamiento' => 'required|date',
-            'desarrolladora_id' => 'required|exists:desarrolladoras,id',
-        ];
+        return Videojuego::rules();
     }
 }

@@ -6,20 +6,20 @@ use App\Models\Comentario;
 use App\Models\User;
 use App\Models\Videojuego;
 use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Illuminate\Http\RedirectResponse;
 
 class ComentarioPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): Response|RedirectResponse
+    public function viewAny(User $user): Response
     {
-        return Response::deny("Solo el administrador puede ver los comentarios");
+        return Response::deny('Sólo el administrador puede ver los comentarios');
         return Response::allow();
-        //return Response::allow();
-
+        // return $user->name == 'admin'
+        //     ? Response::allow()
+        //     : Response::deny('Sólo el administrador puede ver los comentarios.');
     }
 
     /**
@@ -41,8 +41,8 @@ class ComentarioPolicy
     public function store(User $user, Videojuego $videojuego): Response
     {
         return $user->videojuegos()->where('videojuego_id', $videojuego->id)->exists()
-        ? Response::allow()
-        : Response::deny('Solo puedes comentar los videojuegos que hayas comprado');
+            ? Response::allow()
+            : Response::deny('Sólo puedes comentar videojuegos que has comprado.');
     }
 
     /**

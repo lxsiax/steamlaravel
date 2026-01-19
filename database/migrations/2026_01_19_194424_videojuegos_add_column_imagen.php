@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('videojuegos', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->string('imagen')->nullable()->after('desarrolladora_id');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('videojuegos', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            //
         });
     }
 };
