@@ -3,7 +3,7 @@
     <div class="card bg-base-300 w-full shadow-sm">
         <figure class="p-4">
             <img width="420" height="300"
-                src="{{ asset('storage/videojuegos/' . $videojuego->imagen) }}"
+                src="{{ $videojuego->imagen_url }}"
                 alt="" />
         </figure>
         <div class="card-body">

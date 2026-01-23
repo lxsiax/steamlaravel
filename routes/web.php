@@ -4,9 +4,11 @@ use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\GeneroController;
 use App\Http\Controllers\VideojuegoController;
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 // Route::get('/', function () {
 //     return redirect()->route('videojuegos.index');
@@ -103,7 +105,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', function () {
         return view('users.profile', [
-            'usuario' => Auth::user(),
+            'user' => Auth::user(),
         ]);
     })->name('user.profile');
 
@@ -129,7 +131,7 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
-        return redirect()->intended(route('user.profile'));
+        return redirect()->intended(route('users.profile'));
     }
 
     return back()->withErrors([
@@ -138,3 +140,9 @@ Route::post('/login', function (Request $request) {
 })->name('login.perform');
 
 Route::resource('comentarios', ComentarioController::class);
+
+Route::get('/pruebas', function () {
+    return imagen_url_relativa('ejemplo.jpg');
+    // return parse_url(Storage::disk('imagenes')->url('ejemplo.jpg'), PHP_URL_PATH);
+    // Storage::disk('imagenes')->url('ejemplo.jpg');
+});

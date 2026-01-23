@@ -1,45 +1,57 @@
 <x-app-layout>
-    <x-errores/>
-    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-6">
-        <figure>
-            <img
-            src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-            alt="Shoes" />
-        </figure>
-        <br>
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ $usuario->name }}</h1>
+    <div class="card bg-base-300 w-full shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title text-3xl uppercase tracking-wide">
+                {{ $user->name }}
+            </h2>
+            <span class="pb-10">{{ $user->email }}</span>
 
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Email:</span>
-            <span class="text-gray-900 ml-2">{{ $usuario->email}}</span>
-        </div><div class="mb-2">
-            <span class="font-semibold text-gray-700">Videojuegos:</span>
-        </div>
-        <ul class="list bg-base-100 rounded-box shadow-md">
-            @foreach ($usuario->videojuegos as $videojuego)
-                <li class="flex items-center gap-3 p-2 border-b last:border-b-0">
-                    <img class="w-10 h-10 rounded-full" src="https://img.daisyui.com/images/profile/demo/1@94.webp" alt="Genero"/>
-                    <div class="flex-1 min-w-0">
-                            {{ $videojuego->nombre }}
-                    </div>
+            <ul class="list bg-base-100 rounded-box shadow-md">
+                <li class="p-4 opacity-60 tracking-wide text-xl">
+                    Videojuegos que tengo
                 </li>
-            @endforeach
-        </ul><br>
-        <div class="mb-2">
-            <span class="font-semibold text-gray-700">Hardware:</span>
+
+                @foreach ($user->videojuegos as $videojuego)
+                    <li class="list-row">
+                        <div>
+                            <img class="size-10 rounded-box"
+                                src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
+                        </div>
+                        <div>
+                            <div class="text-lg">
+                                <a class="link link-primary" href="{{ route('videojuegos.show', $videojuego) }}">
+                                    {{ $videojuego->nombre }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
         </div>
-        <ul class="list bg-base-100 rounded-box shadow-md">
-            @foreach ($usuario->hardware as $hardware)
-                <li class="flex items-center gap-3 p-2 border-b last:border-b-0">
-                    <img class="w-10 h-10 rounded-full" src="https://img.daisyui.com/images/profile/demo/1@94.webp" alt="Genero"/>
-                    <div class="flex-1 min-w-0">
-                            {{ $hardware->nombre }}
-                    </div>
+
+        <div class="card-body">
+            <ul class="list bg-base-100 rounded-box shadow-md">
+                <li class="p-4 opacity-60 tracking-wide text-xl">
+                    Hardware que tengo
                 </li>
-            @endforeach
-        </ul>
-        <a href="{{route('videojuegos.index')}}" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-            Volver
-        </a>
+
+                @foreach ($user->hardware as $hardware)
+                    <li class="list-row">
+                        <div>
+                            <img class="size-10 rounded-box"
+                                src="https://img.daisyui.com/images/profile/demo/1@94.webp" />
+                        </div>
+                        <div>
+                            <div class="text-lg">
+                                <a class="link link-primary" href="#">
+                                    {{ $hardware->nombre }}
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
     </div>
 </x-app-layout>

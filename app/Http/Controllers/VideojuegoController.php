@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class VideojuegoController extends Controller
 {
@@ -55,12 +56,17 @@ class VideojuegoController extends Controller
     {
         $datos = $request->validated();
         $file = $request->file('imagen');
+        $videojuego =Videojuego::create($datos);
 
         if ($request->hasFile('imagen')) {
-            $ruta = $file->store('videojuegos', 'public');
+            $ext = $file->getClientOriginalExtension();
+            $nombre = $videojuego->id . '.' . $ext;
+            $ruta = $file->storeAs('imagenes', $nombre, 'public');
             $datos['imagen'] = basename($ruta);
+            $videojuego->imagen = $nombre;
+            $videojuego->save();
         }
-        Videojuego::create($datos);
+
         return redirect()->route('videojuegos.index');
     }
 
