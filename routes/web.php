@@ -131,7 +131,7 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
-        return redirect()->intended(route('users.profile'));
+        return redirect()->intended(route('user.profile'));
     }
 
     return back()->withErrors([
@@ -146,3 +146,16 @@ Route::get('/pruebas', function () {
     // return parse_url(Storage::disk('imagenes')->url('ejemplo.jpg'), PHP_URL_PATH);
     // Storage::disk('imagenes')->url('ejemplo.jpg');
 });
+
+Route::get('/ajax', function () {
+    return view('ajax');
+});
+
+Route::post('/ajax/mayusculas', function (Request $request) {
+    $texto = $request->input('texto');
+    return response()->json([
+        'resultado' => strtoupper($texto),
+    ]);
+})->name('ajax.mayusculas');
+
+Route::livewire('/livewire', 'pages::post.create')->name('livewire');
