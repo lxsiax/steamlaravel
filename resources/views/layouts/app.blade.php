@@ -28,6 +28,7 @@
                     <li><a href="{{ route('clientes.index')}}">Clientes</a></li>
                     <li><a href="{{ route('videojuegos.index')}}">Videojuegos</a></li>
                     <li><a href="{{ route('generos.index')}}">Géneros</a></li>
+                    <li><a href="{{ route('desarrolladora.index')}}">Desarrolladoras</a></li>
                     <li>
                         @auth
                         <details>

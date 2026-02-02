@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Desarrolladora extends Model
 {
-    protected $fillable = ['denominacion'];
+    protected $fillable = ['denominacion',
+    'editora_id'];
 
     public function videojuegos(): HasMany
     {

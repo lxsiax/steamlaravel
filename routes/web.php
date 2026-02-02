@@ -159,3 +159,4 @@ Route::post('/ajax/mayusculas', function (Request $request) {
 })->name('ajax.mayusculas');
 
 Route::livewire('/livewire', 'pages::post.create')->name('livewire');
+Route::livewire('/desarrolladoras', 'pages::desarrolladora.index')->name('desarrolladora.index');
