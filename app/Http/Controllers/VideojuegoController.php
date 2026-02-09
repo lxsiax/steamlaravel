@@ -21,6 +21,7 @@ class VideojuegoController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Videojuego::class);
         return view('videojuegos.index', [
             'videojuegos' => Videojuego::with('desarrolladora')->get(),
         ]);
@@ -91,7 +92,7 @@ class VideojuegoController extends Controller
      */
     public function edit(Videojuego $videojuego)
     {
-        Gate::authorize('update', $videojuego);
+        Gate::authorize('update', Videojuego::class);
         return view('videojuegos.edit', [
             'videojuego' => $videojuego,
             'desarrolladoras' => Desarrolladora::all(),
@@ -117,7 +118,7 @@ class VideojuegoController extends Controller
      */
     public function destroy(Videojuego $videojuego)
     {
-        Gate::authorize('delete', $videojuego);
+        Gate::authorize('delete', Videojuego::class);
         $videojuego->delete();
         return redirect()
             ->route('videojuegos.index')

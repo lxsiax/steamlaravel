@@ -13,7 +13,8 @@ class VideojuegoPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        $tresMeses = now()->subMonths(3);
+        return $user->created_at->lessThan($tresMeses);
     }
 
     /**
@@ -37,7 +38,7 @@ class VideojuegoPolicy
      */
     public function update(User $user, Videojuego $videojuego): bool
     {
-        return $user->name == 'admin';
+        return $user->videojuegos()->where('id', $videojuego->id)->exists();
     }
 
     /**
@@ -45,7 +46,9 @@ class VideojuegoPolicy
      */
     public function delete(User $user, Videojuego $videojuego): bool
     {
-        return $user->name == 'admin';
+        $uc = $user->created_at;
+        $vc = $videojuego->create_at;
+        return $uc->diffInMonths($vc) >= 3.0;
     }
 
     /**

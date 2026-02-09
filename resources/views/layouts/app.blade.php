@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Mi aplicación</title>
+    <title>{{ $title ?? 'Mi aplicación' }}</title>
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
@@ -25,25 +25,26 @@
             </div>
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
-                    <li><a href="{{ route('clientes.index')}}">Clientes</a></li>
-                    <li><a href="{{ route('videojuegos.index')}}">Videojuegos</a></li>
-                    <li><a href="{{ route('generos.index')}}">Géneros</a></li>
-                    <li><a href="{{ route('desarrolladora.index')}}">Desarrolladoras</a></li>
+                    <li><a href="{{ route('desarrolladora.index') }}">Desarrolladoras</a></li>
+                    <li><a href="{{ route('generos.index') }}">Géneros</a></li>
+                    <li><a href="{{ route('clientes.index') }}">Clientes</a></li>
+                    <li><a href="{{ route('videojuegos.index') }}">Videojuegos</a></li>
                     <li>
                         @auth
-                        <details>
-                            <summary>{{Auth::user()->name}}</summary>
-                            <ul class="bg-base-100 rounded-t-none p-2">
-                                <li><a href="{{route('user.profile')}}">Perfil</a></li>
-                                <li>
-                                    <form method="POST" action="{{route('logout')}}">
-                                        @csrf
-                                        <button type="submit">Salir</button>
-                                    </form></li>
-                            </ul>
-                        </details>
+                            <details>
+                                <summary>{{ Auth::user()->name }}</summary>
+                                <ul class="bg-base-100 rounded-t-none p-2 z-1">
+                                    <li><a href="{{ route('user.profile') }}">Perfil</a></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit">Salir</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </details>
                         @else
-                        <a class="btn btn-secondary" href="{{ route('login')}}">Iniciar sesión</a>
+                            <a href="{{ route('login') }}">Login</a>
                         @endauth
                     </li>
                 </ul>
@@ -51,8 +52,8 @@
         </div>
         <!-- Principal -->
         <main class="m-6">
-            <x-alert-exito/>
-            <x-alert-fallo/>
+            <x-alert-exito />
+            <x-alert-fallo />
             {{ $slot }}
         </main>
     </div>
